@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+if [[ `command -v figlet` && `command -v toilet` && `command -v pip` ]]; then
+        echo
+else
+        pkgs=(figlet toilet python3-pip)
+        for pkg in "${pkgs[@]}"; do
+                type -p "$pkg" &> /dev/null || {
+                        echo -e "\nInstalando o Pacote: $pkg\n"
+                if [[ `command -v pkg` ]]; then
+                        pkg install "$pkg" -y
+
+                elif [[ `command -v apt-get` ]]; then
+                        sudo apt-get install "$pkg" -y
+
+                elif [[ `command -v pacman` ]]; then
+                        sudo pacman -S "$pkg" --noconfirm
+
+                elif [[ `command -v dnf` ]]; then
+                        sudo dnf -y install "$pkg"
+                fi
+        }
+        done
+fi
+
+if [[ `command -v lolcat` ]]; then
+        echo -e "Todos pacotes estão instalados.\n"
+    else
+        pip install lolcat &> /dev/null
+        echo -e "\nInstalação concluida."
+fi
